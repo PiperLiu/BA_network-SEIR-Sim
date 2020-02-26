@@ -1,9 +1,9 @@
-#######################################################################
-# Copyright (C)                                                       #
-# 2020 Hongjia Liu(piperliu@qq.com)                                   #
-# Permission given to modify the code as long as you keep this        #
-# declaration at the top                                              #
-#######################################################################
+# #######################################################################
+# # Copyright (C)                                                       #
+# # 2020 Hongjia Liu(piperliu@qq.com)                                   #
+# # Permission given to modify the code as long as you keep this        #
+# # declaration at the top                                              #
+# #######################################################################
 
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -298,19 +298,20 @@ def experiment_4_guard(INFECT_INIT=30, flag=0):
 
     return np.asarray(states_each_experiment)
 
-ex_4_data = experiment_4_guard()
+ex_4_data_0 = experiment_4_guard()
 
-S_number_list = np.where(ex_4_data==0, 1, 0).sum(axis=1) / 1000
-E_number_list = np.where(ex_4_data>0, 1, 0).sum(axis=1) / 1000
-I_number_list = np.where(ex_4_data==-1, 1, 0).sum(axis=1) / 1000
-R_number_list = np.where(ex_4_data==-2, 1, 0).sum(axis=1) / 1000
+S_number_list = np.where(ex_4_data_0==0, 1, 0).sum(axis=1) / 1000
+E_number_list = np.where(ex_4_data_0>0, 1, 0).sum(axis=1) / 1000
+I_number_list = np.where(ex_4_data_0==-1, 1, 0).sum(axis=1) / 1000
+R_number_list = np.where(ex_4_data_0==-2, 1, 0).sum(axis=1) / 1000
 
 Days = [1, 2, 3, 8, 10, 15, 20, 30, 40, 50]
 
 fig, axes = plt.subplots(3, 5, figsize=(15, 5))
 for i, D in enumerate(Days):
     plt.subplot(3, 5, i+1)
-    states = ex_4_data[D-1, :]
+    ex_4_data_tmp = np.where(ex_4_data_0==0, 0, 1)
+    states = ex_4_data_tmp[D-1, :]
     nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
     plt.title('day' + str(D))
 plt.subplot(3, 1, 3)
@@ -330,11 +331,11 @@ plt.title('7 to control, but 19 to relax')
 plt.legend(['S', 'E', 'I', 'R'])
 plt.show()
 
-ex_4_data = experiment_4_guard(flag=1)
-S_number_list = np.where(ex_4_data==0, 1, 0).sum(axis=1) / 1000
-E_number_list = np.where(ex_4_data>0, 1, 0).sum(axis=1) / 1000
-I_number_list = np.where(ex_4_data==-1, 1, 0).sum(axis=1) / 1000
-R_number_list = np.where(ex_4_data==-2, 1, 0).sum(axis=1) / 1000
+ex_4_data_1 = experiment_4_guard(flag=1)
+S_number_list = np.where(ex_4_data_1==0, 1, 0).sum(axis=1) / 1000
+E_number_list = np.where(ex_4_data_1>0, 1, 0).sum(axis=1) / 1000
+I_number_list = np.where(ex_4_data_1==-1, 1, 0).sum(axis=1) / 1000
+R_number_list = np.where(ex_4_data_1==-2, 1, 0).sum(axis=1) / 1000
 plt.plot(S_number_list, '*-')
 plt.plot(E_number_list, '*-')
 plt.plot(I_number_list, '*-')
@@ -343,11 +344,11 @@ plt.title('7 to control, but 25 to relax')
 plt.legend(['S', 'E', 'I', 'R'])
 plt.show()
 
-ex_4_data = experiment_4_guard(flag=2)
-S_number_list = np.where(ex_4_data==0, 1, 0).sum(axis=1) / 1000
-E_number_list = np.where(ex_4_data>0, 1, 0).sum(axis=1) / 1000
-I_number_list = np.where(ex_4_data==-1, 1, 0).sum(axis=1) / 1000
-R_number_list = np.where(ex_4_data==-2, 1, 0).sum(axis=1) / 1000
+ex_4_data_2 = experiment_4_guard(flag=2)
+S_number_list = np.where(ex_4_data_2==0, 1, 0).sum(axis=1) / 1000
+E_number_list = np.where(ex_4_data_2>0, 1, 0).sum(axis=1) / 1000
+I_number_list = np.where(ex_4_data_2==-1, 1, 0).sum(axis=1) / 1000
+R_number_list = np.where(ex_4_data_2==-2, 1, 0).sum(axis=1) / 1000
 plt.plot(S_number_list, '*-')
 plt.plot(E_number_list, '*-')
 plt.plot(I_number_list, '*-')
@@ -355,3 +356,14 @@ plt.plot(R_number_list, '*-')
 plt.title('7 to control, but no relax in 50 days')
 plt.legend(['S', 'E', 'I', 'R'])
 plt.show()
+
+# make gif
+for day in range(50):
+    fig, axes = plt.subplots(1, 3, figsize=(5, 2))
+    for i, ex_4_data in enumerate([ex_4_data_0, ex_4_data_1, ex_4_data_2]):
+        plt.subplot(1, 3, i+1)
+        ex_4_data = np.where(ex_4_data==0, 0, 1)
+        states = ex_4_data[day, :]
+        nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
+        plt.title('day' + str(day+1))
+    plt.savefig('utils\\images_for_gif\\' + str(day+1) + '.png')
