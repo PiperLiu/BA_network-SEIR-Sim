@@ -1,14 +1,30 @@
 import imageio
 import os  
 
-def read_png():
+def read_png_4():
     path = os.path.join(__file__, "..")
-    png_list = os.listdir(path)
-    png_list.remove('turn_gif.py')
-    # print(png_list)
+    file_list = os.listdir(path)
+    png_list = file_list.copy()
+    for png in file_list:
+        if len(png) > 6 or png[-4:]!='.png':
+            # print(png)
+            png_list.remove(png)
     png_list.sort(key=lambda x: int(x[:1] if x[1]=='.' else int(x[:2])))
     # print(png_list)
     return png_list
+
+def read_png_1():
+    path = os.path.join(__file__, "..")
+    file_list = os.listdir(path)
+    png_list = file_list.copy()
+    for png in file_list:
+        if len(png) <= 6 or png[-4:]!='.png':
+            # print(png)
+            png_list.remove(png)
+    png_list.sort(key=lambda x: int(x[:1] if x[1]=='_' else int(x[:2])))
+    print(png_list)
+    return png_list
+
   
 def create_gif(image_list, gif_name, duration=0.3):
     frames = []
@@ -18,13 +34,19 @@ def create_gif(image_list, gif_name, duration=0.3):
     imageio.mimsave(gif_name, frames, 'GIF', duration=duration)
     return
 
-def main():
-    #这里放上自己所需要合成的图片
-    image_list = read_png()
+def main_4():
+    image_list = read_png_4()
     gif_name = 'exp_4.gif'
     gif_path = os.path.join(__file__, "..", gif_name)
     create_gif(image_list, gif_path)
 
+def main_1():
+    image_list = read_png_1()
+    gif_name = 'exp_1.gif'
+    gif_path = os.path.join(__file__, "..", gif_name)
+    create_gif(image_list, gif_path)
+
 if __name__ == '__main__':
-    main()
+    # main_4()
+    main_1()
     # read_png()

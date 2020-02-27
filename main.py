@@ -81,26 +81,53 @@ run_theta_day_state = np.where(ex_0_data==0, 0, 1)
 # show results
 theta_day = run_theta_day_state.mean(axis=0).mean(axis=2)
 
-fig, axes = plt.subplots(figsize=(13, 5))
-for t, theta in enumerate(THETAs):
-    plt.plot(np.arange(0, days+1), [30/1000] + list(theta_day[t, :]), '*-')
-plt.xlabel('days')
-plt.ylabel('percentage of infected people')
-plt.legend([r'$\theta=$' + str(theta) for theta in THETAs])
-plt.show()
+# fig, axes = plt.subplots(figsize=(13, 5))
+# for t, theta in enumerate(THETAs):
+#     plt.plot(np.arange(0, days+1), [30/1000] + list(theta_day[t, :]), '*-')
+# plt.xlabel('days')
+# plt.ylabel('percentage of infected people')
+# plt.legend([r'$\theta=$' + str(theta) for theta in THETAs])
+# plt.show()
 
-# show nx draw
-# plot nodes on plt based on networkx
-DAY = 10
+# # show nx draw
+# # plot nodes on plt based on networkx
+# DAY = 10
 
-fig, axes = plt.subplots(2, 5, figsize=(15, 5))
-for i, t in enumerate(THETAs):
-    states = run_theta_day_state[:, i, DAY-1, :].mean(axis=0)
-    plt.subplot(2, 5, i+1)
+# fig, axes = plt.subplots(2, 5, figsize=(15, 5))
+# for i, t in enumerate(THETAs):
+#     states = run_theta_day_state[:, i, DAY-1, :].mean(axis=0)
+#     plt.subplot(2, 5, i+1)
+#     nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
+# plt.show()
+
+# make gif
+# make day 0
+import networkx as nx
+import matplotlib.pyplot as plt
+import numpy as np
+print("making pngs.." + str(0) + " for gif")
+THETAs = [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.5]
+fig, axes = plt.subplots(3, 3, figsize=(4, 5))
+G = nx.random_graphs.barabasi_albert_graph(1000, 5, 0)
+for i in range(9):
+    plt.subplot(3, 3, i+1)
+    states = np.asarray([0]*1000)
     nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
-    plt.title(r'$\theta=$' + str(t))
-plt.show()
+    plt.title(r'$\theta=$' + str(THETAs[i+1]), fontsize=10)
+fig.suptitle('day ' + str(0), fontsize=14, fontweight='bold')
+plt.savefig('utils\\images_for_gif\\' + str(0) + '_exp_1.png')
 
+# pngs
+for day in range(30):
+    print("making pngs.." + str(day+1) + " for gif")
+    fig, axes = plt.subplots(3, 3, figsize=(4, 5))
+    for i, t in enumerate(THETAs[1:]):
+        plt.subplot(3, 3, i+1)
+        states = run_theta_day_state[:, i, day, :].mean(axis=0)
+        nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd, alpha=0.5)
+        plt.title(r'$\theta=$' + str(t), fontsize=10)
+    fig.suptitle('day ' + str(day+1), fontsize=14, fontweight='bold')
+    plt.savefig('utils\\images_for_gif\\' + str(day+1) + '_exp_1.png')
 
 """
 Ex 2
@@ -359,6 +386,7 @@ plt.show()
 
 # make gif
 for day in range(50):
+    print("making pngs.." + str(day+1) + " for gif")
     fig, axes = plt.subplots(1, 3, figsize=(5, 2))
     for i, ex_4_data in enumerate([ex_4_data_0, ex_4_data_1, ex_4_data_2]):
         plt.subplot(1, 3, i+1)
