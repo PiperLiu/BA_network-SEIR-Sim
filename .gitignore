@@ -1,0 +1,7 @@
+# compile files
+*.pyc
+.ipynb_checkpoints/
+
+# docs
+written_file/
+papers/
