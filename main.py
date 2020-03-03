@@ -66,226 +66,226 @@ def experiment_1_THETA(fam_list, THETAs, INFECT_INIT=30, days=10, runs=30):
 
 fam_list, G = return_family_list()
 
-# """
-# Ex 1
-# """
-# # experiment 1.0
-# days = 50
-# THETAs = np.asarray([0.0001, 0.0005, 0.001, 0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.5])
-# ex_0_data = experiment_1_THETA(fam_list, days=days, THETAs=THETAs)
+"""
+Ex 1
+"""
+# experiment 1.0
+days = 50
+THETAs = np.asarray([0.0001, 0.0005, 0.001, 0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.5])
+ex_0_data = experiment_1_THETA(fam_list, days=days, THETAs=THETAs)
 
-# # experiment 1.0
-# # data
-# run_theta_day_state = np.where(ex_0_data==0, 0, 1)
+# experiment 1.0
+# data
+run_theta_day_state = np.where(ex_0_data==0, 0, 1)
 
-# # show results
-# theta_day = run_theta_day_state.mean(axis=0).mean(axis=2)
+# show results
+theta_day = run_theta_day_state.mean(axis=0).mean(axis=2)
 
-# # fig, axes = plt.subplots(figsize=(13, 5))
-# # for t, theta in enumerate(THETAs):
-# #     plt.plot(np.arange(0, days+1), [30/1000] + list(theta_day[t, :]), '*-')
-# # plt.xlabel('days')
-# # plt.ylabel('percentage of infected people')
-# # plt.legend([r'$\theta=$' + str(theta) for theta in THETAs])
-# # plt.show()
+# fig, axes = plt.subplots(figsize=(13, 5))
+# for t, theta in enumerate(THETAs):
+#     plt.plot(np.arange(0, days+1), [30/1000] + list(theta_day[t, :]), '*-')
+# plt.xlabel('days')
+# plt.ylabel('percentage of infected people')
+# plt.legend([r'$\theta=$' + str(theta) for theta in THETAs])
+# plt.show()
 
-# # # show nx draw
-# # # plot nodes on plt based on networkx
-# # DAY = 10
-
-# # fig, axes = plt.subplots(2, 5, figsize=(15, 5))
-# # for i, t in enumerate(THETAs):
-# #     states = run_theta_day_state[:, i, DAY-1, :].mean(axis=0)
-# #     plt.subplot(2, 5, i+1)
-# #     nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
-# # plt.show()
-
-# # make gif
-# # make day 0
-# import networkx as nx
-# import matplotlib.pyplot as plt
-# import numpy as np
-# print("making pngs.." + str(0) + " for gif")
-# THETAs = [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.5]
-# fig, axes = plt.subplots(3, 3, figsize=(4, 5))
-# G = nx.random_graphs.barabasi_albert_graph(1000, 5, 0)
-# for i in range(9):
-#     plt.subplot(3, 3, i+1)
-#     states = np.asarray([0]*1000)
-#     nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
-#     plt.title(r'$\theta=$' + str(THETAs[i+1]), fontsize=10)
-# fig.suptitle('day ' + str(0), fontsize=14, fontweight='bold')
-# plt.savefig('utils\\images_for_gif\\' + str(0) + '_exp_1.png')
-
-# # pngs
-# for day in range(20):
-#     print("making pngs.." + str(day+1) + " for gif")
-#     fig, axes = plt.subplots(3, 3, figsize=(4, 5))
-#     for i, t in enumerate(THETAs[1:]):
-#         plt.subplot(3, 3, i+1)
-#         states = run_theta_day_state[:, i, day, :].mean(axis=0)
-#         nodelist = list(range(1000))
-#         nodelist.sort(key=lambda x: -states[x])
-#         nx.draw(G, node_size=5, nodelist=nodelist, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd, alpha=0.5)
-#         plt.title(r'$\theta=$' + str(t), fontsize=10)
-#     fig.suptitle('day ' + str(day+1), fontsize=14, fontweight='bold')
-#     plt.savefig('utils\\images_for_gif\\' + str(day+1) + '_exp_1.png')
-
-# """
-# Ex 2
-# """
-# # observe
-# Ms = [1, 2, 3, 5, 10]
+# # show nx draw
+# # plot nodes on plt based on networkx
+# DAY = 10
 
 # fig, axes = plt.subplots(2, 5, figsize=(15, 5))
-# for i, M in enumerate(Ms):
-#     fam_list, G = return_family_list(m=M)
+# for i, t in enumerate(THETAs):
+#     states = run_theta_day_state[:, i, DAY-1, :].mean(axis=0)
 #     plt.subplot(2, 5, i+1)
-#     nx.draw(G, node_size=5, node_color='#000000', edge_color='#00008B', width=0.3, pos=nx.spring_layout(G, random_state=1))
-#     plt.title(r'$M_0=$' + str(M) + '\n' + 'average_path_length: ' + str(round(nx.average_shortest_path_length(G), 3)))
-#     plt.subplot(2, 5, i+6)
-#     d = nx.degree_histogram(G)
-#     x = range(len(d))           
-#     y = [z / float(sum(d)) for z in d]
-#     plt.loglog(x, y, 'b*')
-# plt.show()
-
-# # experiment
-# from calculator import *
-# # @return:  illed people [runs:[M_0:[day:[state]]]]
-# # /= runs for average
-# def experiment_2_M0(Ms=[1, 2, 3, 5, 10], INFECT_INIT=30, days=10, runs=30, theta=0.1):
-#     states_each_experiment = np.zeros((runs, len(Ms), days, 1000))
-#     paras.THETA = theta
-#     for m, M in enumerate(Ms):
-#         fam_list, G = return_family_list(n=1000, m=M)
-#         cal = Calculator(fam_list)
-
-#         for r in trange(runs):
-#             cal.cls()
-#             infects = []
-#             while len(infects) < INFECT_INIT:
-#                 i = np.random.randint(0, len(fam_list))
-#                 infects.append(i)
-#             for i in infects:
-#                 fam_list[i].state = 5
-#             # cal.next_iter(days) returns [day:[state, state, state]]
-#             each_experiment = np.array(cal.next_iter(days))
-#             states_each_experiment[r, m] = each_experiment
-#     return states_each_experiment
-
-# # experiment 2
-# ex_2_data = experiment_2_M0()
-
-# # data
-# run_M0_day_state = np.where(ex_2_data==0, 0, 1)
-
-# # show results
-# Ms=[1, 2, 3, 5, 10]
-# M0_day = run_M0_day_state.mean(axis=0).mean(axis=2)
-
-# fig, axes = plt.subplots(2, 5, figsize=(15, 5))
-# for i, M in enumerate(Ms):
-#     fam_list, G = return_family_list(m=M)
-#     plt.subplot(2, 5, i+1)
-#     states = run_M0_day_state[:, i, 9, :].mean(axis=0)
 #     nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
-#     plt.title(r'$M_0=$' + str(M) + '\n' + 'day-10 infected possibiliy')
-#     plt.subplot(2, 5, i+6)
-#     plt.plot(np.arange(1, 11), M0_day[i], '*-')
-#     plt.ylim(0, 1.05)
-#     plt.title('infected people in 10 days')
 # plt.show()
 
+# make gif
+# make day 0
+import networkx as nx
+import matplotlib.pyplot as plt
+import numpy as np
+print("making pngs.." + str(0) + " for gif")
+THETAs = [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.5]
+fig, axes = plt.subplots(3, 3, figsize=(4, 5))
+G = nx.random_graphs.barabasi_albert_graph(1000, 5, 0)
+for i in range(9):
+    plt.subplot(3, 3, i+1)
+    states = np.asarray([0]*1000)
+    nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
+    plt.title(r'$\theta=$' + str(THETAs[i+1]), fontsize=10)
+fig.suptitle('day ' + str(0), fontsize=14, fontweight='bold')
+plt.savefig('utils\\images_for_gif\\' + str(0) + '_exp_1.png')
 
-# """
-# Ex 3
-# """
-# # observe
-# fam_list, G = return_family_list()
+# pngs
+for day in range(20):
+    print("making pngs.." + str(day+1) + " for gif")
+    fig, axes = plt.subplots(3, 3, figsize=(4, 5))
+    for i, t in enumerate(THETAs[1:]):
+        plt.subplot(3, 3, i+1)
+        states = run_theta_day_state[:, i, day, :].mean(axis=0)
+        nodelist = list(range(1000))
+        nodelist.sort(key=lambda x: -states[x])
+        nx.draw(G, node_size=5, nodelist=nodelist, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd, alpha=0.5)
+        plt.title(r'$\theta=$' + str(t), fontsize=10)
+    fig.suptitle('day ' + str(day+1), fontsize=14, fontweight='bold')
+    plt.savefig('utils\\images_for_gif\\' + str(day+1) + '_exp_1.png')
 
-# fig, axes = plt.subplots(1, 3, figsize=(18, 5))
-# for i in range(3):
-#     node_size = 5
-#     node_color = [0]*len(fam_list)
-#     nodelist = G.nodes()
-#     plt.subplot(1, 3, i+1)
-#     nx.draw(G, node_size=0, width=0, pos=nx.spring_layout(G, random_state=1), alpha=1)
-#     if i==0:
-#         plt.title("degrees")
-#         node_size = [d[1] for d in list(G.degree())]
-#         node_color = [(d-min(node_size))/(max(node_size)-min(node_size)) for d in node_size]
-#     if i==1:
-#         plt.title("degrees" + r"$\geq 15$")
-#         nodelist = [d[0] for d in list(G.degree()) if d[1] >= 15]
-#         node_size = [G.degree(i) for i in nodelist]
-#         node_color = [(d-min(node_size))/(max(node_size)-min(node_size)) for d in node_size]
-#     if i==2:
-#         plt.title("degrees" + r"$\geq 30$")
-#         nodelist = [d[0] for d in list(G.degree()) if d[1] >= 30]
-#         node_size = [G.degree(i) for i in nodelist]
-#         node_color = [(d-min(node_size))/(max(node_size)-min(node_size)) for d in node_size]
-#     nx.draw(G, node_size=node_size, node_color=node_color, nodelist=nodelist, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.Blues_r)
-# plt.show()
+"""
+Ex 2
+"""
+# observe
+Ms = [1, 2, 3, 5, 10]
 
-# # experiment
-# from calculator import *
-# # @return:  illed people [runs:[D:[day:[state]]]]
-# # /= runs for average
-# def experiment_3_hubs(Ds=[9999, 15, 30], INFECT_INIT=30, days=10, runs=30, theta=0.1):
-#     states_each_experiment = np.zeros((runs, len(Ds), days, 1000))
-#     paras.THETA = theta
-#     for d, D in enumerate(Ds):
-#         fam_list, G = return_family_list(n=1000)
-#         cal = Calculator(fam_list)
+fig, axes = plt.subplots(2, 5, figsize=(15, 5))
+for i, M in enumerate(Ms):
+    fam_list, G = return_family_list(m=M)
+    plt.subplot(2, 5, i+1)
+    nx.draw(G, node_size=5, node_color='#000000', edge_color='#00008B', width=0.3, pos=nx.spring_layout(G, random_state=1))
+    plt.title(r'$M_0=$' + str(M) + '\n' + 'average_path_length: ' + str(round(nx.average_shortest_path_length(G), 3)))
+    plt.subplot(2, 5, i+6)
+    d = nx.degree_histogram(G)
+    x = range(len(d))           
+    y = [z / float(sum(d)) for z in d]
+    plt.loglog(x, y, 'b*')
+plt.show()
 
-#         for r in trange(runs):
-#             cal.cls()
-#             infects = []
-#             while len(infects) < INFECT_INIT:
-#                 i = np.random.randint(0, len(fam_list))
-#                 infects.append(i)
-#             for i in infects:
-#                 fam_list[i].state = 5
+# experiment
+from calculator import *
+# @return:  illed people [runs:[M_0:[day:[state]]]]
+# /= runs for average
+def experiment_2_M0(Ms=[1, 2, 3, 5, 10], INFECT_INIT=30, days=10, runs=30, theta=0.1):
+    states_each_experiment = np.zeros((runs, len(Ms), days, 1000))
+    paras.THETA = theta
+    for m, M in enumerate(Ms):
+        fam_list, G = return_family_list(n=1000, m=M)
+        cal = Calculator(fam_list)
 
-#             # control hubs
-#             for fam in fam_list:
-#                 fam.seal = False
-#             nodelist = [degree[0] for degree in list(G.degree()) if degree[1] >= D]
-#             for fam in fam_list:
-#                 if fam.label in nodelist:
-#                     fam.seal = True
+        for r in trange(runs):
+            cal.cls()
+            infects = []
+            while len(infects) < INFECT_INIT:
+                i = np.random.randint(0, len(fam_list))
+                infects.append(i)
+            for i in infects:
+                fam_list[i].state = 5
+            # cal.next_iter(days) returns [day:[state, state, state]]
+            each_experiment = np.array(cal.next_iter(days))
+            states_each_experiment[r, m] = each_experiment
+    return states_each_experiment
 
-#             # cal.next_iter(days) returns [day:[state, state, state]]
-#             each_experiment = np.array(cal.next_iter(days))
-#             states_each_experiment[r, d] = each_experiment
-#     return states_each_experiment
+# experiment 2
+ex_2_data = experiment_2_M0()
 
-# # experiment 3
-# ex_3_data = experiment_3_hubs()
+# data
+run_M0_day_state = np.where(ex_2_data==0, 0, 1)
 
-# # data
-# run_D_day_state = np.where(ex_3_data==0, 0, 1)
+# show results
+Ms=[1, 2, 3, 5, 10]
+M0_day = run_M0_day_state.mean(axis=0).mean(axis=2)
 
-# # show results
-# Ds = [9999, 15, 30]
-# fam_list, G = return_family_list(n=1000)
-# D_day = run_D_day_state.mean(axis=0).mean(axis=2)
+fig, axes = plt.subplots(2, 5, figsize=(15, 5))
+for i, M in enumerate(Ms):
+    fam_list, G = return_family_list(m=M)
+    plt.subplot(2, 5, i+1)
+    states = run_M0_day_state[:, i, 9, :].mean(axis=0)
+    nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
+    plt.title(r'$M_0=$' + str(M) + '\n' + 'day-10 infected possibiliy')
+    plt.subplot(2, 5, i+6)
+    plt.plot(np.arange(1, 11), M0_day[i], '*-')
+    plt.ylim(0, 1.05)
+    plt.title('infected people in 10 days')
+plt.show()
 
-# fig, axes = plt.subplots(2, 3, figsize=(18, 7))
-# for i, D in enumerate(Ds):
-#     plt.subplot(2, 3, i+1)
-#     states = run_D_day_state[:, i, 9, :].mean(axis=0)
-#     nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
-#     if i==0:
-#         plt.title('no hubs to control')
-#     else:
-#         plt.title('control degree' + r'$\geq$' + str(D))
-#     plt.subplot(2, 3, i+4)
-#     plt.plot(np.arange(1, 11), D_day[i], '*-')
-#     plt.ylim(0, 1)
-#     plt.title('infected people in 10 days')
-# plt.show()
+
+"""
+Ex 3
+"""
+# observe
+fam_list, G = return_family_list()
+
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+for i in range(3):
+    node_size = 5
+    node_color = [0]*len(fam_list)
+    nodelist = G.nodes()
+    plt.subplot(1, 3, i+1)
+    nx.draw(G, node_size=0, width=0, pos=nx.spring_layout(G, random_state=1), alpha=1)
+    if i==0:
+        plt.title("degrees")
+        node_size = [d[1] for d in list(G.degree())]
+        node_color = [(d-min(node_size))/(max(node_size)-min(node_size)) for d in node_size]
+    if i==1:
+        plt.title("degrees" + r"$\geq 15$")
+        nodelist = [d[0] for d in list(G.degree()) if d[1] >= 15]
+        node_size = [G.degree(i) for i in nodelist]
+        node_color = [(d-min(node_size))/(max(node_size)-min(node_size)) for d in node_size]
+    if i==2:
+        plt.title("degrees" + r"$\geq 30$")
+        nodelist = [d[0] for d in list(G.degree()) if d[1] >= 30]
+        node_size = [G.degree(i) for i in nodelist]
+        node_color = [(d-min(node_size))/(max(node_size)-min(node_size)) for d in node_size]
+    nx.draw(G, node_size=node_size, node_color=node_color, nodelist=nodelist, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.Blues_r)
+plt.show()
+
+# experiment
+from calculator import *
+# @return:  illed people [runs:[D:[day:[state]]]]
+# /= runs for average
+def experiment_3_hubs(Ds=[9999, 15, 30], INFECT_INIT=30, days=10, runs=30, theta=0.1):
+    states_each_experiment = np.zeros((runs, len(Ds), days, 1000))
+    paras.THETA = theta
+    for d, D in enumerate(Ds):
+        fam_list, G = return_family_list(n=1000)
+        cal = Calculator(fam_list)
+
+        for r in trange(runs):
+            cal.cls()
+            infects = []
+            while len(infects) < INFECT_INIT:
+                i = np.random.randint(0, len(fam_list))
+                infects.append(i)
+            for i in infects:
+                fam_list[i].state = 5
+
+            # control hubs
+            for fam in fam_list:
+                fam.seal = False
+            nodelist = [degree[0] for degree in list(G.degree()) if degree[1] >= D]
+            for fam in fam_list:
+                if fam.label in nodelist:
+                    fam.seal = True
+
+            # cal.next_iter(days) returns [day:[state, state, state]]
+            each_experiment = np.array(cal.next_iter(days))
+            states_each_experiment[r, d] = each_experiment
+    return states_each_experiment
+
+# experiment 3
+ex_3_data = experiment_3_hubs()
+
+# data
+run_D_day_state = np.where(ex_3_data==0, 0, 1)
+
+# show results
+Ds = [9999, 15, 30]
+fam_list, G = return_family_list(n=1000)
+D_day = run_D_day_state.mean(axis=0).mean(axis=2)
+
+fig, axes = plt.subplots(2, 3, figsize=(18, 7))
+for i, D in enumerate(Ds):
+    plt.subplot(2, 3, i+1)
+    states = run_D_day_state[:, i, 9, :].mean(axis=0)
+    nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
+    if i==0:
+        plt.title('no hubs to control')
+    else:
+        plt.title('control degree' + r'$\geq$' + str(D))
+    plt.subplot(2, 3, i+4)
+    plt.plot(np.arange(1, 11), D_day[i], '*-')
+    plt.ylim(0, 1)
+    plt.title('infected people in 10 days')
+plt.show()
 
 
 """
@@ -405,24 +405,24 @@ for day in range(60):
         fig.suptitle('day ' + str(day+1), fontsize=14)
         plt.savefig('utils\\images_for_gif\\x' + str(day+1) + '.png')
 
-# # make gif for networkx_draw
-# for day in range(50):
-#     print("making pngs.." + str(day+1) + " for gif")
-#     fig, axes = plt.subplots(1, 3, figsize=(8, 4))
-#     for i, ex_4_data in enumerate([ex_4_data_0, ex_4_data_1, ex_4_data_2]):
-#         ax = plt.subplot(1, 3, i+1)
-#         ex_4_data = np.where(ex_4_data==0, 0, 1)
-#         states = ex_4_data[day, :]
-#         nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
-#         plt.title('experiment-' + str(i+1))
-#         if i==1:
-#             plt.axis('on')
-#             plt.xticks([])
-#             plt.yticks([])
-#             ax.spines['top'].set_visible(False)
-#             ax.spines['right'].set_visible(False)
-#             ax.spines['bottom'].set_visible(False)
-#             ax.spines['left'].set_visible(False)
-#             plt.xlabel('day ' + str(day+1), fontsize=14)
-#     # fig.suptitle('day ' + str(day+1), fontsize=14)
-#     plt.savefig('utils\\images_for_gif\\' + str(day+1) + '.png')
+# make gif for networkx_draw
+for day in range(50):
+    print("making pngs.." + str(day+1) + " for gif")
+    fig, axes = plt.subplots(1, 3, figsize=(8, 4))
+    for i, ex_4_data in enumerate([ex_4_data_0, ex_4_data_1, ex_4_data_2]):
+        ax = plt.subplot(1, 3, i+1)
+        ex_4_data = np.where(ex_4_data==0, 0, 1)
+        states = ex_4_data[day, :]
+        nx.draw(G, node_size=5, node_color=states, width=0.3, pos=nx.spring_layout(G, random_state=1), cmap=plt.cm.OrRd)
+        plt.title('experiment-' + str(i+1))
+        if i==1:
+            plt.axis('on')
+            plt.xticks([])
+            plt.yticks([])
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['bottom'].set_visible(False)
+            ax.spines['left'].set_visible(False)
+            plt.xlabel('day ' + str(day+1), fontsize=14)
+    # fig.suptitle('day ' + str(day+1), fontsize=14)
+    plt.savefig('utils\\images_for_gif\\' + str(day+1) + '.png')
