@@ -1,7 +1,7 @@
 # BA-network and SEIR SIM
 
 ## News
-- Result has published on  WeChat Official Accounts, 2020-3-3: [link](https://mp.weixin.qq.com/s/TLfMSeDlqpIvlL0fNT40OA)
+- Result has published on  TJU COME's WeChat Official Accounts, 2020-3-3: [link](https://mp.weixin.qq.com/s/TLfMSeDlqpIvlL0fNT40OA)
 
 ## Prerequisites
 - python 3.7.0
