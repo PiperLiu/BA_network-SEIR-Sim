@@ -1,5 +1,7 @@
 # BA-network and SEIR SIM
 
+![](./utils/images_for_gif/exp_4.gif)
+
 ## News
 - Result has published on  TJU COME's WeChat Official Accounts, 2020-3-3: [link](https://mp.weixin.qq.com/s/TLfMSeDlqpIvlL0fNT40OA)
 
